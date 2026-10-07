@@ -1,57 +1,92 @@
-# Member 1 — Synthetic data
+# Synthetic Data Contribution
 
-Assigned student: Kavya S Nair
+## Overview
 
-## Files to push
+Implemented the synthetic data component for the project, including synthetic learner data generation, dataset validation, and automated testing.
 
-- `dataset/`
-- `data/`
-- `tests/test_dataset.py`
+## Work Completed
 
-Copy the contents of your member folder into the shared repository root, preserving subdirectories. Read `docs/GITHUB_WORKFLOW.md` in the integrated project for the exact stage/commit instructions. The full app requires all four contributions.
+### Synthetic Data Generation
 
-## Understand, verify and develop your module
+Implemented the data generation module in:
 
-1. Explain why each field exists and which fields are available before selection.
+`dataset/generate.py`
 
-2. Run generation twice with the same seed; compare the CSVs.
+The generator creates synthetic learner records containing:
 
-3. Run validation and the dataset tests; inspect outcomes from each UI.
+- Learner ID
+- Diagnostic score
+- Experience level
+- Learning preference
+- Device type
+- Initial engagement
+- UI variant
+- Action probability
+- Quiz performance
+- Task completion
+- Reward
+- Data source
 
-4. Review the simulator assumptions with the guide; document any changes you make.
+Generated dataset:
 
-Verification:
-`python -m unittest discover -s tests -p test_dataset.py -v`
+`data/synthetic_learners.csv`
 
-## Your contribution record
+Metadata:
 
-### Changes I made:
+`data/synthetic_learners.metadata.json`
 
-- Added the synthetic learner dataset under `data/`.
-- Added `synthetic_learners.csv` and its metadata file.
-- Added the synthetic data generation module in `dataset/generate.py`.
-- Added dataset validation functionality in `dataset/validate.py`.
-- Added `dataset/__init__.py`.
-- Added automated dataset tests in `tests/test_dataset.py`.
-- Preserved the required repository folder structure for Member 1.
-- Removed Python `__pycache__` files before committing.
+### Cold-Start Data
 
+The simulator represents the initial decision point where no previous interaction history is available.
 
-  ### Requirements I verified:
+Therefore, `initial_engagement` is recorded as `unavailable`.
 
-- Confirmed that the required Member 1 folders/files are present:
-  - `dataset/`
-  - `data/`
-  - `tests/test_dataset.py`
-- Verified the synthetic dataset contains 1000 generated learner records.
-- Verified that the dataset passes the validation checks.
-- Verified reproducibility by generating two datasets with the same seed and confirming that the CSV files were identical.
-- Verified dataset bounds, coverage, empty-generation handling, and corruption detection through the automated tests.
-- Verified that the generated data uses the expected UI variants and cold-start assumptions.
+Before UI selection, the available information includes:
 
-### Checks run and outcomes:
+- Diagnostic score
+- Experience level
+- Learning preference
+- Device type
 
-#### Dataset validation
+The UI variant is then selected as the simulated action. Quiz performance, task completion, and reward are recorded as subsequent outcomes.
+
+### Dataset Validation
+
+Implemented validation in:
+
+`dataset/validate.py`
+
+The validation checks:
+
+- Required fields
+- Unique learner IDs
+- Diagnostic score range
+- Valid experience and device values
+- Valid UI variants
+- Cold-start engagement value
+- Quiz and task outcome consistency
+- Reward calculation
+- Action probability
+- Synthetic data source label
+- Empty dataset detection
+
+### Automated Testing
+
+Added:
+
+`tests/test_dataset.py`
+
+The tests cover:
+
+- Dataset bounds and coverage
+- Corrupted data detection
+- Empty generation handling
+- Reproducibility with the same seed
+- Different output with different seeds
+
+## Verification
+
+### Dataset Validation
 
 Command:
 
@@ -59,15 +94,20 @@ Command:
 
 Result:
 
-- **PASS: 1000 rows**
-- UI variant counts:
-  - Hint: 271
-  - Concise: 235
-  - Challenge: 255
-  - Example: 239
-- All generated rows passed the validation checks.
+**PASS: 1000 rows**
 
-#### Dataset tests
+UI variant distribution:
+
+| UI Variant | Records |
+|---|---:|
+| Hint | 271 |
+| Concise | 235 |
+| Challenge | 255 |
+| Example | 239 |
+
+All generated records passed validation.
+
+### Dataset Tests
 
 Command:
 
@@ -79,34 +119,73 @@ Result:
 - `test_corruption_is_detected` — PASS
 - `test_no_empty_generation` — PASS
 - `test_reproducible_and_seed_changes_output` — PASS
-- **4/4 tests passed**
-- **Overall result: OK**
 
-#### Reproducibility check
+**4/4 tests passed.**
 
-- Generated the synthetic dataset twice with `count=1000` and `seed=16`.
-- Compared both generated CSV files using Windows file comparison.
-- Result: `FC: no differences encountered`.
-- This confirms that generation is reproducible when the same seed is used.
+### Reproducibility Check
 
+Generated the dataset twice with:
 
+- Count: `1000`
+- Seed: `16`
 
-### Problems I fixed:
+The generated CSV files were compared.
 
-- Ensured the Member 1 files were copied into the shared repository root with the required directory structure.
-- Removed generated Python `__pycache__` and `.pyc` files from the contribution.
-- Verified that only the required dataset, generation/validation, and test files were committed.
-- Confirmed that temporary files created during reproducibility testing were removed after comparison.
+Result:
 
-### Pull request / commit references:
+`FC: no differences encountered`
 
-- Branch: `Kavya_S_Nair`
-- Commit: `a7ded7`
-- Commit message: `Add synthetic data generation and validation`
-- Remote branch: `origin/Kavya_S_Nair`
+This confirms reproducible generation when the same seed is used.
 
-### Remaining work:
+## Simulation Assumptions
 
-- Review the simulator assumptions with the project guide and document any agreed changes.
-- Inspect the dataset behaviour through the integrated application UI after all four member contributions are merged.
-- Create a Pull Request from `Kavya_S_Nair` to the team's integration/main branch.
+The dataset represents simulated learner behaviour and is not intended to represent real learner measurements.
+
+The simulation uses:
+
+- Four UI variants: `hint`, `example`, `concise`, and `challenge`
+- Uniform random UI assignment
+- Initial action probability of `0.25`
+- Experience level influencing diagnostic score
+- Learning preference and diagnostic score influencing simulated outcomes
+- Simulated quiz performance and task completion
+- Reward calculated from quiz correctness and task completion
+
+Only the outcome of the assigned UI variant is recorded; counterfactual outcomes are not generated.
+
+The assumptions are treated as simulation assumptions rather than research findings.
+
+## Problems Addressed
+
+- Organized the synthetic data files into the required repository structure.
+- Implemented dataset generation and validation.
+- Added automated dataset tests.
+- Verified reproducibility using a fixed seed.
+- Removed temporary test files and Python cache files.
+- Verified the generated dataset against the validation rules.
+
+## Repository References
+
+Branch:
+
+`Kavya_S_Nair`
+
+Commits:
+
+- `a7ded7` — Add synthetic data generation and validation
+- `812f80f` — Document Member 1 synthetic data contribution
+
+Files contributed:
+
+```text
+data/
+├── synthetic_learners.csv
+└── synthetic_learners.metadata.json
+
+dataset/
+├── __init__.py
+├── generate.py
+└── validate.py
+
+tests/
+└── test_dataset.py
