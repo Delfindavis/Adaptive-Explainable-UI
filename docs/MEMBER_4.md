@@ -29,6 +29,6 @@ Verification: `python -m unittest discover -s tests -v`
 - Changes I made: Integrated the local prototype with scoring, persistence, and checks. Added `server.py` for API routes, `core.py` for SQLite database logic, and `app.js` for front-end integration. Updated the main `README.md` with team assignments.
 - Requirements I verified: Verified the HTTP API flow (start, variant, complete) and CSV export functionality. Confirmed that the current selection uses a fixed demo rule, not a bandit algorithm yet.
 - Checks run and outcomes: Ran `python -m unittest discover -s tests -v`. All 10 tests passed successfully. Verified that repeated identical submissions return the stored result without duplicating.
-- Problems I fixed: Ensured SQLite database properly initializes and persists data across server restarts.
+- Problems I fixed: Identified and resolved a cross-platform Windows OS file-locking bug. The original codebase failed on Windows with `WinError 32` because it relied on Linux's forgiving file system to delete open files during test teardowns. I refactored the SQLite lifecycle in `core.py` using `contextlib.closing` to explicitly close unmanaged file handles, allowing all unit tests to pass cleanly on Windows.
 - Pull request / commit references: Branch `Delfin_Davis` to main.
 - Remaining work: Transition fixed demo rules to LinUCB/Thompson Sampling in Phase II.
