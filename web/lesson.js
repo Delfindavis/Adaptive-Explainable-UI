@@ -12,7 +12,7 @@ const views = {
 
 export function lesson(host, session, onVariant, onComplete) {
   host.innerHTML = `<div class="eyebrow">02 / YOUR LESSON</div><h1>Make a decision with Python.</h1><p class="lead">Learn to trace a simple <code>if / else</code> statement.</p>
-    <div class="notice"><strong>Phase I selection: fixed demo rule</strong><p id="reason"></p><small>This prototype does not train a bandit or generate SHAP/LIME explanations.</small></div>
+    <div class="notice"><strong>Adaptive UI selection: LinUCB</strong><p id="reason"></p><small>LinUCB balances predicted reward with exploration when selecting a presentation style. This prototype does not yet implement SHAP/LIME explanations.</small></div>
     <div class="toolbar"><span>Presentation style</span><select id="style-select" aria-label="Presentation style">${Object.entries(names).map(([key,value]) => `<option value="${key}">${value}</option>`).join('')}</select><span class="muted">Switch styles for the review demo.</span></div>
     <article class="card" id="lesson-content"></article><p class="error" role="alert" id="lesson-error"></p>
     <form class="card" id="assessment"><div class="eyebrow">03 / CHECK YOUR UNDERSTANDING</div><h2>Try it yourself</h2><p>The same assessment is used for every presentation style.</p>

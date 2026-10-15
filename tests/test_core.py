@@ -5,6 +5,49 @@ from core import Store, reward
 
 
 class CoreTests(unittest.TestCase):
+    def test_assessment_updates_linucb_once(self):
+        session = self.store.start(self.payload)
+        sid = session['session_id']
+        variant = session['ui_variant']
+
+        before = self.store.model.counts[variant]
+
+        self.store.complete(sid, [1, 1, 1])
+        after_first = self.store.model.counts[variant]
+
+        self.assertEqual(after_first, before + 1)
+
+        self.store.complete(sid, [1, 1, 1])
+        after_second = self.store.model.counts[variant]
+
+        self.assertEqual(after_second, after_first)
+    def test_linucb_state_persists_across_store_instances(self):
+        session = self.store.start(self.payload)
+        sid = session['session_id']
+        variant = session['ui_variant']
+
+        self.store.complete(sid, [1, 1, 1])
+
+        saved_counts = dict(self.store.model.counts)
+        saved_b = {
+            key: list(value)
+            for key, value in self.store.model.b.items()
+        }
+
+        restored_store = Store(self.path)
+
+        self.assertEqual(
+            restored_store.model.counts,
+            saved_counts
+        )
+        self.assertEqual(
+            restored_store.model.b,
+            saved_b
+        )
+        self.assertEqual(
+            restored_store.model.counts[variant],
+            1
+        )
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.path = Path(self.temp.name) / 'test.sqlite3'
@@ -14,12 +57,27 @@ class CoreTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
-    def test_rule_and_manual_override(self):
+    def test_linucb_selection_and_manual_override(self):
         session = self.store.start(self.payload)
-        self.assertEqual(session['ui_variant'], 'example')
+
+        self.assertIn(
+            session['ui_variant'],
+            ('hint', 'example', 'concise', 'challenge')
+        )
+        self.assertEqual(session['selection_method'], 'linucb')
+        self.assertIn('LinUCB', session['reason'])
         self.assertEqual(session['context']['diagnostic_score'], 100)
-        changed = self.store.change_variant(session['session_id'], 'concise')
-        self.assertEqual(changed['selection_method'], 'manual_preview')
+
+        changed = self.store.change_variant(
+            session['session_id'],
+            'concise'
+        )
+
+        self.assertEqual(changed['ui_variant'], 'concise')
+        self.assertEqual(
+          changed['selection_method'],
+         'manual_preview'
+        )
 
     def test_low_score_gets_hint(self):
         self.payload['answers'] = [3, 2, 3]

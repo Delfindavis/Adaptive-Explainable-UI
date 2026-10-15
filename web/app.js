@@ -25,14 +25,14 @@ function showLearning() {
 function reset() {session = null; sessionStorage.removeItem('adaptlearn_session'); showLearning();}
 function showResult() {
   const result = session.result;
-  host.innerHTML = `<div class="eyebrow">LESSON COMPLETE</div><h1>A small step, recorded.</h1><p class="lead">Your result is saved locally. Phase II will connect this feedback to the learning algorithm.</p>
+  host.innerHTML = `<div class="eyebrow">LESSON COMPLETE</div><h1>A small step, recorded.</h1><p class="lead">Your assessment result is saved locally, and the backend updates the LinUCB model using the assessment reward.</p>
     <div class="metrics"><div class="metric"><strong>${result.correct} / 3</strong><span>Assessment correct</span></div><div class="metric"><strong>${result.reward.toFixed(2)}</strong><span>Demonstration reward</span></div><div class="metric"><strong>${names[session.ui_variant]}</strong><span>Final presentation style</span></div></div>
     <section class="card"><h2>Review the answers</h2><ol class="feedback">${[
       '29 is not greater than 30, so the program prints Mild day.',
       'score >= 50 includes 50 and every larger value.',
       'x == 5 is true when x is 5, so it prints Yes.'
     ].map((text, i) => `<li><strong class="${result.answers[i] === result.correct_answers[i] ? 'success' : 'error'}">${result.answers[i] === result.correct_answers[i] ? 'Correct' : 'Review'}</strong> — ${text}</li>`).join('')}</ol></section>
-    <div class="notice"><strong>How the reward is calculated</strong><p>0.8 × quiz accuracy + 0.2 × completion. This is a proposed prototype formula, not a validated measure of learning.</p><small>${session.selection_method === 'manual_preview' ? 'You previewed UI styles during this session. This result is unsuitable for a controlled comparison of a single style.' : 'This session used a fixed selection rule.'} No model update has occurred.</small></div>
+    <div class="notice"><strong>How the reward is calculated</strong><p>0.8 × quiz accuracy + 0.2 × completion. This is a proposed prototype formula, not a validated measure of learning.</p><small>${session.selection_method === 'manual_preview' ? 'You previewed UI styles during this session. This result is unsuitable for a controlled comparison of a single style and does not train LinUCB.' : session.selection_method === 'linucb' ? 'LinUCB selected this presentation style, and the backend updates the model using this assessment reward.' : 'Selection method: ' + session.selection_method}</small></div>
     <div class="actions"><button id="restart">Try another learner</button><a href="/api/download/interactions">Download local interaction records</a></div>`;
   document.querySelector('#restart').addEventListener('click', reset);
 }
