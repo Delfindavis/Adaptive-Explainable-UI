@@ -55,3 +55,36 @@ document.querySelector('#data-nav').addEventListener('click', showData);
 const existing = sessionStorage.getItem('adaptlearn_session');
 if (existing) {try {remember(await api('/api/session/' + encodeURIComponent(existing)));} catch {sessionStorage.removeItem('adaptlearn_session');}}
 showLearning();
+// AdaptLearn theme toggle: persistent Light and Night modes.
+const themeToggle = document.querySelector('#theme-toggle');
+const themeIcon = document.querySelector('#theme-icon');
+const themeLabel = document.querySelector('#theme-label');
+
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('adaptlearn_theme', theme);
+
+  themeIcon.textContent = isDark ? '☀️' : '🌙';
+  themeLabel.textContent = isDark ? 'Light mode' : 'Night mode';
+
+  themeToggle.setAttribute(
+    'aria-label',
+    isDark ? 'Switch to light mode' : 'Switch to night mode'
+  );
+
+  themeToggle.setAttribute(
+    'aria-pressed',
+    String(isDark)
+  );
+}
+
+// Use the saved preference; otherwise start in Night Mode.
+const savedTheme = localStorage.getItem('adaptlearn_theme');
+applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+
+themeToggle.addEventListener('click', () => {
+  const currentTheme = document.documentElement.dataset.theme;
+  applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+});
