@@ -3,14 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Phase I academic prototype for explainable cold-start adaptive learning interfaces.">
-  <title>AdaptLearn · Phase I</title>
+
+  <meta name="description"
+        content="AdaptLearn is an academic prototype exploring explainable, adaptive learning interfaces using contextual bandits.">
+  <meta name="theme-color" content="#F7F8FC">
+
+  <title>AdaptLearn — Personalised Learning Experience</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
   <link rel="stylesheet" href="/styles.css">
 </head>
+
 <body>
-  <header><a class="brand" href="/">a<span>AdaptLearn</span></a><nav aria-label="Main navigation"><button id="learn-nav" class="nav-button">Learning demo</button><button id="data-nav" class="nav-button">Synthetic dataset</button></nav><span class="phase">PHASE I</span></header>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="AdaptLearn home">
+      <span class="brand-mark" aria-hidden="true">a</span>
+      <span class="brand-name">AdaptLearn</span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <button id="learn-nav" class="nav-button" type="button">
+        Learning demo
+      </button>
+
+      <button id="data-nav" class="nav-button" type="button">
+        Synthetic dataset
+      </button>
+    </nav>
+
+    <span class="phase">
+      <span class="status-dot" aria-hidden="true"></span>
+      PHASE I
+    </span>
+  </header>
+
   <main id="app" tabindex="-1"></main>
-  <footer>Group 16 · NSS College of Engineering, Palakkad <span>Academic prototype · Python conditionals</span></footer>
+
+  <footer class="site-footer">
+    <span>Group 16 · NSS College of Engineering, Palakkad</span>
+    <span>Academic prototype · Adaptive learning research</span>
+  </footer>
+
   <script type="module" src="/app.js"></script>
 </body>
 </html>
